@@ -1,0 +1,7 @@
+CREATE TABLE stock (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    quarter VARCHAR(255),
+    stock VARCHAR(255),
+    date VARCHAR(255),
+    open VARCHAR(255)
+);

@@ -1,4 +1,4 @@
-package com.rbc.code.challenge.rbc;
+package com.rbc.code.challenge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
