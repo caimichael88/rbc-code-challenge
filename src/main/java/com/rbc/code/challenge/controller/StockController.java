@@ -1,17 +1,12 @@
 package com.rbc.code.challenge.controller;
 
 import com.rbc.code.challenge.dao.entity.StockEntity;
-import com.rbc.code.challenge.dao.entity.Tutorial;
 import com.rbc.code.challenge.helper.StockHelper;
 import com.rbc.code.challenge.message.ResponseMessage;
 import com.rbc.code.challenge.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +26,7 @@ public class StockController {
   @PostMapping("/upload")
   public ResponseEntity<ResponseMessage> uploadStockFile(@RequestParam("attachment") MultipartFile attachment) {
     String message = "";
+    log.info("Calling controller to upload file");
 
     if (StockHelper.hasCSVFormat(attachment)) {
       try {
@@ -50,7 +46,7 @@ public class StockController {
 
   @PostMapping("/insert")
   public ResponseEntity<StockEntity> insertStock(@Valid @RequestBody StockEntity newStock) {
-    log.info("Calling controller to insert new stock");
+    log.info("Calling controller to insert new stock {}", newStock);
     StockEntity createdStock = stockService.insertStock(newStock);
 
     return new ResponseEntity<>(createdStock, HttpStatus.CREATED);
@@ -68,7 +64,9 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
 
-      return new ResponseEntity<>(stocks, HttpStatus.OK);
+      ResponseEntity<List<StockEntity>> listResponseEntity = new ResponseEntity<>(stocks, HttpStatus.OK);
+
+      return listResponseEntity;
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -77,6 +75,9 @@ public class StockController {
 
   @GetMapping("/stocks")
   public ResponseEntity<List<StockEntity>> getAllStocks() {
+
+    log.info("Calling controller to get all stocks");
+
     try {
       List<StockEntity> stocks = stockService.getStocks();
 
