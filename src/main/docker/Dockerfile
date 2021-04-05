@@ -1,0 +1,7 @@
+FROM mysql
+
+ARG ARTIFACT_NAME
+ENV ARTIFACT_NAME=${ARTIFACT_NAME}
+ADD ${ARTIFACT_NAME} .
+
+ENTRYPOINT [ "bash", "-c", "./entrypoint.sh" ]

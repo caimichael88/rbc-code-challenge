@@ -1,5 +1,6 @@
 package com.rbc.code.challenge.helper;
 
+import com.rbc.code.challenge.dao.entity.StockEntity;
 import com.rbc.code.challenge.dao.entity.Tutorial;
 import org.apache.commons.csv.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class StockHelper {
   public static String TYPE = "text/csv";
@@ -43,6 +46,40 @@ public class StockHelper {
       }
 
       return tutorials;
+    } catch (IOException e) {
+      throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+    }
+  }
+
+  public static List<StockEntity> csvToStocks(InputStream is) {
+    try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+         CSVParser csvParser = new CSVParser(fileReader,
+                 CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+
+      List<StockEntity> tutorials = new ArrayList<StockEntity>();
+
+      Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+
+      return StreamSupport
+              .stream(csvRecords.spliterator(), false)
+              .map(csvRecord -> new StockEntity(
+                      csvRecord.get("quarter"),
+                      csvRecord.get("stock"),
+                      csvRecord.get("date"),
+                      csvRecord.get("open")
+              ))
+              .collect(Collectors.toList());
+
+//      for (CSVRecord csvRecord : csvRecords) {
+//        Tutorial tutorial = new Tutorial(
+//                csvRecord.get("Title"),
+//                csvRecord.get("Description"),
+//                Boolean.parseBoolean(csvRecord.get("Published"))
+//        );
+//
+//        tutorials.add(tutorial);
+//      }
+
     } catch (IOException e) {
       throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
     }

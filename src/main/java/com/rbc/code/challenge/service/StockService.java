@@ -32,6 +32,15 @@ public class StockService {
     }
   }
 
+  public void saveStocks(MultipartFile file) {
+    try {
+      List<StockEntity> tutorials = StockHelper.csvToStocks(file.getInputStream());
+      stockRepository.saveAll(tutorials);
+    } catch (IOException e) {
+      throw new RuntimeException("fail to store csv data: " + e.getMessage());
+    }
+  }
+
   public ByteArrayInputStream load() {
     List<Tutorial> tutorials = repository.findAll();
 

@@ -21,26 +21,25 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-//@CrossOrigin("http://localhost:8081")
 @Controller
-@RequestMapping("/api/csv")
+@RequestMapping("/api/rbc")
 public class StockController {
 
   @Autowired
   StockService stockService;
 
   @PostMapping("/upload")
-  public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<ResponseMessage> uploadStockFile(@RequestParam("attachment") MultipartFile attachment) {
     String message = "";
 
-    if (StockHelper.hasCSVFormat(file)) {
+    if (StockHelper.hasCSVFormat(attachment)) {
       try {
-        stockService.save(file);
+        stockService.saveStocks(attachment);
 
-        message = "Uploaded the file successfully: " + file.getOriginalFilename();
+        message = "Uploaded the file successfully: " + attachment.getOriginalFilename();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
       } catch (Exception e) {
-        message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+        message = "Could not upload the file: " + attachment.getOriginalFilename() + "!";
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
       }
     }
@@ -89,32 +88,6 @@ public class StockController {
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
-
-  @GetMapping("/tutorials")
-  public ResponseEntity<List<Tutorial>> getAllTutorials() {
-    try {
-      List<Tutorial> tutorials = stockService.getAllTutorials();
-
-      if (tutorials.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-
-      return new ResponseEntity<>(tutorials, HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @GetMapping("/download")
-  public ResponseEntity<Resource> getFile() {
-    String filename = "tutorials.csv";
-    InputStreamResource file = new InputStreamResource(stockService.load());
-
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-        .contentType(MediaType.parseMediaType("application/csv"))
-        .body(file);
   }
 
 }
