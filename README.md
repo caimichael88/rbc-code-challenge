@@ -3,10 +3,9 @@
 ## TODO
 ```
 1. Set up local and production profile
-2. Create cucumber integration test
-3. Add more validation for the stock fields.
-4. Move project from Maven to Gradle
-5. Create an Angular Front end 
+2. Add more validation for the stock fields.
+3. Move project from Maven to Gradle
+4. Create an Angular Front end 
 ```
 
 ### Prerequisites
