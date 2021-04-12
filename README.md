@@ -50,22 +50,22 @@ rununing the local start resources will install the mysql database as well as th
     The sample csv file is located inside the local/init/stocks.csv
     Ensure you run the local start resource script first and check the table is created.
    
-    http://localhost:8080/api/rbc/upload
+    http://localhost:8081/api/rbc/upload
     ```
     **insert single stock**:
     ```
     Test JSON is under test/resources/newStock.json
    
-    http://localhost:8080/api/rbc/insert
+    http://localhost:8081/api/rbc/insert
     ```
     
     **Get Stocks based on stock name**:
     ```
-    http://localhost:8080/api/rbc/get/AA
+    http://localhost:8081/api/rbc/get/AA
     ```
     *Get Stocks based on stock name**:
     ```
-    http://localhost:8080/api/rbc/stocks
+    http://localhost:8081/api/rbc/stocks
     ```
 
 
